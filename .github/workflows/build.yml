@@ -5,6 +5,9 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: windows-latest
@@ -27,11 +30,15 @@ jobs:
       run: |
         pyinstaller --onefile --windowed --name "ExcelMerger" excel_merger_app.py
 
+    - name: Get current date
+      id: date
+      run: echo "date=$(date +'%Y%m%d-%H%M')" >> $GITHUB_OUTPUT
+
     - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: v1.0
-        name: Excel Merger v1.0
+        tag_name: v1.0-${{ steps.date.outputs.date }}
+        name: Excel Merger ${{ steps.date.outputs.date }}
         files: dist/ExcelMerger.exe
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
