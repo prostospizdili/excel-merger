@@ -27,9 +27,11 @@ jobs:
       run: |
         pyinstaller --onefile --windowed --name "ExcelMerger" excel_merger_app.py
 
-    - name: Upload EXE artifact
-      uses: actions/upload-artifact@v4
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
       with:
-        name: ExcelMerger-Windows
-        path: dist/ExcelMerger.exe
-        retention-days: 30
+        tag_name: v1.0
+        name: Excel Merger v1.0
+        files: dist/ExcelMerger.exe
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
